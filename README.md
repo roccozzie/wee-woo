@@ -8,4 +8,4 @@ a no-fail ambulance feed for a 1.5-year-old, built to the same pattern as Rocco'
 - parent corner: long-press (1.5s) the top-right corner for siren volume and mute
 - single self-contained `index.html`, just open it or serve it statically. on an iphone, lock him in with Guided Access so palm mashing cannot leave the page
 
-Live: https://wee-woo.vercel.app (Vercel project wee-woo, git-linked to this repo - pushes to main auto-deploy). Sibling game: Rocco's Garage (https://github.com/roccozzie/roccos-garage).
+Live: https://wee-woo-gamma.vercel.app (Vercel project wee-woo, git-linked to this repo - pushes to main auto-deploy; wee-woo.vercel.app was already taken, so Vercel assigned the -gamma name). Sibling game: Rocco's Garage (https://github.com/roccozzie/roccos-garage).
