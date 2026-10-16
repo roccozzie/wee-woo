@@ -234,6 +234,37 @@
   @keyframes veilPulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.07);} }
   #startVeil.gone{ display:none; }
 
+
+  /* ---------- MODE SWITCH ---------- */
+  .mode-switch{ display:flex; gap:12px; justify-content:center; margin-top:16px; pointer-events:auto; }
+  .mode-btn{
+    background:rgba(255,255,255,0.94); border:4px solid rgba(255,255,255,0.9);
+    box-shadow:0 8px 20px rgba(29,36,64,0.25);
+    border-radius:18px; padding:10px 14px 8px; cursor:pointer;
+    font-family:inherit; font-weight:800; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mode-btn svg{ width:88px; height:56px; display:block; }
+  .mode-btn span{ font-size:13px; letter-spacing:0.04em; }
+  .mode-btn.active{
+    border-color:#ffd94d; background:#ffffff;
+    box-shadow:0 0 0 3px #e63946, 0 10px 24px rgba(29,36,64,0.3);
+    transform:scale(1.05);
+  }
+  #cornerModeSwitch{
+    position:absolute; top:calc(env(safe-area-inset-top, 0px) + 50px); left:14px; z-index:25;
+    display:flex; gap:8px; opacity:0; pointer-events:none; transition:opacity 0.4s;
+  }
+  #cornerModeSwitch.show{ opacity:1; pointer-events:auto; }
+  #cornerModeSwitch .mode-btn{ padding:6px 8px; border-radius:14px; border-width:3px; }
+  #cornerModeSwitch .mode-btn svg{ width:46px; height:30px; }
+  #cornerModeSwitch .mode-btn span{ display:none; }
+  /* fire mode: the blue glow becomes a white strobe glow */
+  #stage.fire-mode #glowBlue{ background:radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 65%); }
+  .light-white{ animation:strobeB 0.72s steps(1,end) infinite; }
+  .beacon-halo-w{ animation:strobeB 0.72s steps(1,end) infinite; }
+
   @media (prefers-reduced-motion: reduce){
     .wheel{ animation-duration:3s; }
     #hint, #weewooBubble, #startVeil .pulse{ animation:none; }
@@ -260,15 +291,23 @@
 
   <div id="titleCard">
     <h1>WEE <span class="woo">WOO!</span></h1>
-    <p>Ozzie's ambulances</p>
+    <p id="subtitle">Ozzie's ambulances</p>
     <div><span id="weewooBubble">🚑 wee woo wee woo!</span></div>
+    <div class="mode-switch" role="group" aria-label="Pick your ride">
+      <button class="mode-btn active" type="button" data-mode="amb" aria-label="Ambulances"><svg viewBox="0 0 96 60" aria-hidden="true"><rect x="4" y="16" width="50" height="28" rx="6" fill="#ffffff" stroke="#c8cede" stroke-width="2"/><rect x="4" y="28" width="50" height="6" fill="#e63946"/><path d="M54 44 V24 q0-4 4-5 l14-2 q4 0 6 3 l8 12 q6 3 6 8 v4 z" fill="#ffffff" stroke="#c8cede" stroke-width="2"/><rect x="60" y="24" width="14" height="9" rx="2" fill="#bfe6ff"/><g fill="#e63946"><rect x="24" y="20" width="4" height="12"/><rect x="20" y="24" width="12" height="4"/></g><rect x="18" y="10" width="10" height="6" rx="3" fill="#ff2d3c"/><rect x="28" y="10" width="10" height="6" rx="3" fill="#2f7bff"/><circle cx="22" cy="46" r="7" fill="#232946"/><circle cx="22" cy="46" r="3" fill="#ffd94d"/><circle cx="72" cy="46" r="7" fill="#232946"/><circle cx="72" cy="46" r="3" fill="#ffd94d"/></svg><span>AMBULANCES</span></button>
+      <button class="mode-btn" type="button" data-mode="fire" aria-label="Fire trucks"><svg viewBox="0 0 96 60" aria-hidden="true"><g stroke="#8b96ad" stroke-width="3"><line x1="10" y1="9" x2="70" y2="9"/><line x1="10" y1="16" x2="70" y2="16"/></g><g stroke="#8b96ad" stroke-width="2"><line x1="18" y1="9" x2="18" y2="16"/><line x1="30" y1="9" x2="30" y2="16"/><line x1="42" y1="9" x2="42" y2="16"/><line x1="54" y1="9" x2="54" y2="16"/></g><rect x="6" y="20" width="56" height="24" rx="5" fill="#e63946"/><rect x="6" y="32" width="56" height="5" fill="#ffd94d"/><path d="M62 44 V26 q0-4 4-5 l12-1 q4 0 6 3 l6 9 q4 2 4 6 v6 z" fill="#c1272d"/><rect x="68" y="26" width="12" height="8" rx="2" fill="#bfe6ff"/><rect x="12" y="22" width="9" height="5" rx="2" fill="#ff2d3c"/><rect x="23" y="22" width="9" height="5" rx="2" fill="#ffffff" stroke="#c8cede" stroke-width="1"/><circle cx="40" cy="25" r="3.5" fill="#ffd94d" stroke="#d99a1f" stroke-width="1.5"/><circle cx="22" cy="46" r="7" fill="#232946"/><circle cx="22" cy="46" r="3" fill="#ffffff"/><circle cx="74" cy="46" r="7" fill="#232946"/><circle cx="74" cy="46" r="3" fill="#ffffff"/></svg><span>FIRE TRUCKS</span></button>
+    </div>
   </div>
 
   <div id="badge">WEE WOO</div>
+  <div id="cornerModeSwitch" aria-label="Choose vehicle">
+    <button class="mode-btn active" type="button" data-mode="amb" aria-label="Ambulances"><svg viewBox="0 0 96 60" aria-hidden="true"><rect x="4" y="16" width="50" height="28" rx="6" fill="#ffffff" stroke="#c8cede" stroke-width="2"/><rect x="4" y="28" width="50" height="6" fill="#e63946"/><path d="M54 44 V24 q0-4 4-5 l14-2 q4 0 6 3 l8 12 q6 3 6 8 v4 z" fill="#ffffff" stroke="#c8cede" stroke-width="2"/><rect x="60" y="24" width="14" height="9" rx="2" fill="#bfe6ff"/><g fill="#e63946"><rect x="24" y="20" width="4" height="12"/><rect x="20" y="24" width="12" height="4"/></g><rect x="18" y="10" width="10" height="6" rx="3" fill="#ff2d3c"/><rect x="28" y="10" width="10" height="6" rx="3" fill="#2f7bff"/><circle cx="22" cy="46" r="7" fill="#232946"/><circle cx="22" cy="46" r="3" fill="#ffd94d"/><circle cx="72" cy="46" r="7" fill="#232946"/><circle cx="72" cy="46" r="3" fill="#ffd94d"/></svg><span>Ambulances</span></button>
+    <button class="mode-btn" type="button" data-mode="fire" aria-label="Fire trucks"><svg viewBox="0 0 96 60" aria-hidden="true"><g stroke="#8b96ad" stroke-width="3"><line x1="10" y1="9" x2="70" y2="9"/><line x1="10" y1="16" x2="70" y2="16"/></g><g stroke="#8b96ad" stroke-width="2"><line x1="18" y1="9" x2="18" y2="16"/><line x1="30" y1="9" x2="30" y2="16"/><line x1="42" y1="9" x2="42" y2="16"/><line x1="54" y1="9" x2="54" y2="16"/></g><rect x="6" y="20" width="56" height="24" rx="5" fill="#e63946"/><rect x="6" y="32" width="56" height="5" fill="#ffd94d"/><path d="M62 44 V26 q0-4 4-5 l12-1 q4 0 6 3 l6 9 q4 2 4 6 v6 z" fill="#c1272d"/><rect x="68" y="26" width="12" height="8" rx="2" fill="#bfe6ff"/><rect x="12" y="22" width="9" height="5" rx="2" fill="#ff2d3c"/><rect x="23" y="22" width="9" height="5" rx="2" fill="#ffffff" stroke="#c8cede" stroke-width="1"/><circle cx="40" cy="25" r="3.5" fill="#ffd94d" stroke="#d99a1f" stroke-width="1.5"/><circle cx="22" cy="46" r="7" fill="#232946"/><circle cx="22" cy="46" r="3" fill="#ffffff"/><circle cx="74" cy="46" r="7" fill="#232946"/><circle cx="74" cy="46" r="3" fill="#ffffff"/></svg><span>Fire trucks</span></button>
+  </div>
   <div id="sirenChip"></div>
   <div id="hint" aria-hidden="true">👉🚑👈</div>
 
-  <div id="startVeil"><div class="pulse">Tap anywhere to play! 🚑</div></div>
+  <div id="startVeil"><div class="pulse" id="veilPulse">Tap anywhere to play! 🚑</div></div>
 
   <div id="parentCorner" aria-hidden="true"></div>
 
@@ -325,6 +364,22 @@
     { id:"phaser",label:"🚨 Phaser siren" }
   ];
 
+  var FIRE_TYPES = ["pumper","ladder","miniFire"];
+
+  var FIRE_PALETTES = [
+    { name:"Fire Red",      body:"#e63946", lower:"#c1272d", stripe:"#ffd94d", accent:"#ffffff", hub:"#ffd94d" },
+    { name:"Bright Yellow", body:"#ffd21f", lower:"#eda90c", stripe:"#e63946", accent:"#1d2440", hub:"#ffffff" },
+    { name:"White over Red",body:"#ffffff", lower:"#e63946", stripe:"#ffd94d", accent:"#e63946", hub:"#ffd94d" },
+    { name:"Lime Yellow",   body:"#d7e94b", lower:"#bcd42f", stripe:"#e63946", accent:"#1d2440", hub:"#ffffff" }
+  ];
+
+  var FIRE_SIRENS = [
+    { id:"mechQ",   label:"🚨 Mechanical Q siren" },
+    { id:"airhorn", label:"📯 Air horn blast!" },
+    { id:"fireYelp",label:"🚨 Fire yelp siren" },
+    { id:"qhorn",   label:"🚨 Q siren + air horn" }
+  ];
+
   /* ================= STATE ================= */
   var stage = document.getElementById("stage");
   var sceneBg = document.getElementById("sceneBg");
@@ -335,6 +390,10 @@
   var hint = document.getElementById("hint");
   var badge = document.getElementById("badge");
   var sirenChip = document.getElementById("sirenChip");
+  var subtitle = document.getElementById("subtitle");
+  var weewooBubble = document.getElementById("weewooBubble");
+  var veilPulse = document.getElementById("veilPulse");
+  var cornerModeSwitch = document.getElementById("cornerModeSwitch");
   var speedLines = document.getElementById("speedLines");
   var startVeil = document.getElementById("startVeil");
   var parentCorner = document.getElementById("parentCorner");
@@ -342,7 +401,8 @@
   var volSlider = document.getElementById("volSlider");
   var muteBtn = document.getElementById("muteBtn");
 
-  var current = null;         // {type, palette, scene, siren, pitch}
+  var vehicleMode = "amb";    // "amb" | "fire" — session only
+  var current = null;         // {mode, type, palette, scene, siren, pitch}
   var busy = false;           // mid-transition
   var started = false;        // audio unlocked / veil dismissed
   var volume = 0.7;
@@ -353,17 +413,24 @@
   function pickDifferent(arr, notIdx){ var i; do { i = rand(arr.length); } while (arr.length > 1 && i === notIdx); return i; }
 
   function nextCombo(prev){
-    var t = prev ? pickDifferent(VEHICLE_TYPES, VEHICLE_TYPES.indexOf(prev.type)) : rand(VEHICLE_TYPES.length);
-    var p = prev ? pickDifferent(PALETTES, PALETTES.indexOf(prev.paletteObj)) : rand(PALETTES.length);
+    var isFire = vehicleMode === "fire";
+    var types = isFire ? FIRE_TYPES : VEHICLE_TYPES;
+    var pals = isFire ? FIRE_PALETTES : PALETTES;
+    var sirs = isFire ? FIRE_SIRENS : SIRENS;
+    var sameMode = !!prev && prev.mode === vehicleMode;
+    var t = sameMode ? pickDifferent(types, types.indexOf(prev.type)) : rand(types.length);
+    var p = sameMode ? pickDifferent(pals, pals.indexOf(prev.paletteObj)) : rand(pals.length);
     var s = prev ? pickDifferent(SCENES, SCENES.indexOf(prev.sceneObj)) : rand(SCENES.length);
-    var si = prev ? pickDifferent(SIRENS, SIRENS.indexOf(prev.sirenObj)) : rand(SIRENS.length);
+    var si = sameMode ? pickDifferent(sirs, sirs.indexOf(prev.sirenObj)) : rand(sirs.length);
     return {
-      type: VEHICLE_TYPES[t],
-      paletteObj: PALETTES[p],
+      mode: vehicleMode,
+      type: types[t],
+      paletteObj: pals[p],
       sceneObj: SCENES[s],
-      sirenObj: SIRENS[si],
+      sirenObj: sirs[si],
       pitch: 0.92 + Math.random()*0.18,
-      horn: Math.random() < 0.28
+      horn: Math.random() < 0.28,
+      ladderRaised: Math.random() < 0.5
     };
   }
 
@@ -490,14 +557,19 @@
       + '<line x1="'+x+'" y1="'+(y-r*0.48)+'" x2="'+x+'" y2="'+(y+r*0.48)+'"/>'
       + '<line x1="'+(x-r*0.48)+'" y1="'+y+'" x2="'+(x+r*0.48)+'" y2="'+y+'"/></g></g>';
   }
-  function lightBar(x, y, w){
+  function lightBar(x, y, w, mode){
     var seg = w/2;
+    var isFire = mode === "fire";
     return '<g>'
       + '<rect x="'+(x-4)+'" y="'+(y+9)+'" width="'+(w+8)+'" height="7" rx="3.5" fill="#232946" opacity="0.85"/>'
       + '<circle class="beacon-halo-r" cx="'+(x+seg/2)+'" cy="'+y+'" r="17" fill="rgba(255,45,60,0.35)"/>'
-      + '<circle class="beacon-halo-b" cx="'+(x+seg+seg/2)+'" cy="'+y+'" r="17" fill="rgba(50,120,255,0.35)"/>'
+      + (isFire
+          ? '<circle class="beacon-halo-w" cx="'+(x+seg+seg/2)+'" cy="'+y+'" r="17" fill="rgba(255,255,255,0.45)"/>'
+          : '<circle class="beacon-halo-b" cx="'+(x+seg+seg/2)+'" cy="'+y+'" r="17" fill="rgba(50,120,255,0.35)"/>')
       + '<rect class="light-red" x="'+x+'" y="'+(y-9)+'" width="'+seg+'" height="18" rx="9" fill="#ff2d3c" stroke="#fff" stroke-width="2.5"/>'
-      + '<rect class="light-blue" x="'+(x+seg)+'" y="'+(y-9)+'" width="'+seg+'" height="18" rx="9" fill="#2f7bff" stroke="#fff" stroke-width="2.5"/>'
+      + (isFire
+          ? '<rect class="light-white" x="'+(x+seg)+'" y="'+(y-9)+'" width="'+seg+'" height="18" rx="9" fill="#ffffff" stroke="#fff" stroke-width="2.5"/>'
+          : '<rect class="light-blue" x="'+(x+seg)+'" y="'+(y-9)+'" width="'+seg+'" height="18" rx="9" fill="#2f7bff" stroke="#fff" stroke-width="2.5"/>')
       + "</g>";
   }
   function cross(x, y, s, color){
@@ -607,6 +679,116 @@
       + "</svg>";
   }
 
+
+  function bellSVG(x, y){
+    return '<g>'
+      + '<path d="M '+(x-9)+' '+y+' a9 9 0 0 1 18 0 l3 7 h-24 z" fill="#ffd94d" stroke="#d99a1f" stroke-width="2"/>'
+      + '<circle cx="'+x+'" cy="'+(y+10)+'" r="3.4" fill="#d99a1f"/>'
+      + '<rect x="'+(x-2.5)+'" y="'+(y-13)+'" width="5" height="5" rx="2" fill="#d99a1f"/>'
+      + "</g>";
+  }
+  function hoseCoil(x, y, r){
+    return '<g fill="none" stroke="#9aa3c0">'
+      + '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" stroke-width="5" fill="#f4f6fd"/>'
+      + '<circle cx="'+x+'" cy="'+y+'" r="'+(r*0.62)+'" stroke-width="4"/>'
+      + '<circle cx="'+x+'" cy="'+y+'" r="'+(r*0.26)+'" stroke-width="3.4"/>'
+      + "</g>";
+  }
+  function ladderSVG(raised){
+    var rungs = "";
+    var len = raised ? 296 : 336;
+    for (var i=14; i<len; i+=24){
+      rungs += '<line x1="'+i+'" y1="-12" x2="'+i+'" y2="4"/>';
+    }
+    if (raised){
+      return '<g>'
+        + '<circle cx="104" cy="76" r="15" fill="#8b96ad" stroke="#5f6a82" stroke-width="3"/><circle cx="104" cy="76" r="6" fill="#5f6a82"/>'
+        + '<g transform="translate(104,72) rotate(-25)" stroke="#aeb9cf" stroke-width="5">'
+        + '<line x1="0" y1="-12" x2="'+len+'" y2="-12"/><line x1="0" y1="4" x2="'+len+'" y2="4"/>'
+        + '<g stroke-width="3.4">'+rungs+'</g></g></g>';
+    }
+    return '<g transform="translate(40,58)" stroke="#aeb9cf" stroke-width="5">'
+      + '<line x1="0" y1="0" x2="'+len+'" y2="0"/><line x1="0" y1="16" x2="'+len+'" y2="16"/>'
+      + '<g stroke-width="3.4">'
+      + (function(){ var o=""; for (var j=14;j<len;j+=24){ o += '<line x1="'+j+'" y1="0" x2="'+j+'" y2="16"/>'; } return o; })()
+      + '</g></g>';
+  }
+
+  function fireTruckSVG(type, pal, raised){
+    var B = pal.body, L = pal.lower, S = pal.stripe, A = pal.accent, H = pal.hub;
+    var svgOpen = '<svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
+    var shadow = '<ellipse cx="230" cy="272" rx="196" ry="14" fill="rgba(20,24,50,0.20)"/>';
+
+    if (type === "pumper"){
+      return svgOpen + shadow
+        + '<rect x="30" y="72" width="268" height="154" rx="14" fill="'+B+'"/>'
+        + '<rect x="30" y="176" width="268" height="50" rx="14" fill="'+L+'"/>'
+        + '<rect x="30" y="134" width="268" height="20" fill="'+S+'"/>'
+        + hoseCoil(72, 106, 20)
+        // pump panel with dials
+        + '<rect x="118" y="86" width="94" height="42" rx="8" fill="#dfe3ee" stroke="#8b96ad" stroke-width="2.5"/>'
+        + '<circle cx="136" cy="102" r="8" fill="#fff" stroke="#5f6a82" stroke-width="2"/><line x1="136" y1="102" x2="141" y2="97" stroke="#e63946" stroke-width="2"/>'
+        + '<circle cx="165" cy="102" r="8" fill="#fff" stroke="#5f6a82" stroke-width="2"/><line x1="165" y1="102" x2="165" y2="95" stroke="#e63946" stroke-width="2"/>'
+        + '<circle cx="194" cy="102" r="8" fill="#fff" stroke="#5f6a82" stroke-width="2"/><line x1="194" y1="102" x2="189" y2="97" stroke="#e63946" stroke-width="2"/>'
+        + '<g fill="#5f6a82"><circle cx="136" cy="120" r="3.4"/><circle cx="152" cy="120" r="3.4"/><circle cx="168" cy="120" r="3.4"/><circle cx="184" cy="120" r="3.4"/><circle cx="200" cy="120" r="3.4"/></g>'
+        + '<rect x="228" y="86" width="52" height="42" rx="8" fill="rgba(255,255,255,0.35)" stroke="rgba(20,24,50,0.15)" stroke-width="2.5"/>'
+        + '<text x="164" y="205" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="29" letter-spacing="4" fill="'+A+'">FIRE</text>'
+        // cab
+        + '<path d="M298 226 V118 q0 -14 14 -18 l52 -8 q14 -2 22 10 l34 52 q20 10 20 30 v42 z" fill="'+B+'"/>'
+        + '<path d="M316 122 l10 -14 q3 -4 9 -5 l40 -6 q8 -1 13 6 l24 38 q2 4 -3 4 h-88 q-6 0 -5 -6 z" fill="#bfe6ff" stroke="#8fb8d8" stroke-width="3"/>'
+        + '<rect x="298" y="160" width="142" height="18" fill="'+S+'"/>'
+        + '<rect x="408" y="182" width="16" height="12" rx="4" fill="#ffe14d" stroke="#e0a92e" stroke-width="2"/>'
+        + bellSVG(410, 148)
+        + face(356, 128)
+        + lightBar(120, 60, 92, "fire")
+        + wheel(108, 232, 34, H) + wheel(356, 232, 34, H)
+        + '<rect x="30" y="222" width="410" height="10" rx="5" fill="rgba(20,24,50,0.12)"/>'
+        + "</svg>";
+    }
+    if (type === "ladder"){
+      return svgOpen + shadow
+        + ladderSVG(raised)
+        + '<rect x="26" y="88" width="282" height="138" rx="14" fill="'+B+'"/>'
+        + '<rect x="26" y="178" width="282" height="48" rx="14" fill="'+L+'"/>'
+        + '<rect x="26" y="140" width="282" height="20" fill="'+S+'"/>'
+        + '<rect x="44" y="98" width="62" height="34" rx="7" fill="rgba(255,255,255,0.35)" stroke="rgba(20,24,50,0.15)" stroke-width="2.5"/>'
+        + '<rect x="118" y="98" width="62" height="34" rx="7" fill="rgba(255,255,255,0.35)" stroke="rgba(20,24,50,0.15)" stroke-width="2.5"/>'
+        + hoseCoil(256, 114, 17)
+        + '<text x="166" y="206" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="27" letter-spacing="4" fill="'+A+'">FIRE</text>'
+        // cab
+        + '<path d="M308 226 V122 q0 -14 14 -18 l48 -8 q14 -2 22 10 l32 50 q18 10 18 28 v42 z" fill="'+B+'"/>'
+        + '<path d="M326 126 l10 -14 q3 -4 9 -5 l36 -6 q8 -1 13 6 l22 36 q2 4 -3 4 h-82 q-6 0 -5 -6 z" fill="#bfe6ff" stroke="#8fb8d8" stroke-width="3"/>'
+        + '<rect x="308" y="162" width="134" height="18" fill="'+S+'"/>'
+        + '<rect x="416" y="184" width="15" height="12" rx="4" fill="#ffe14d" stroke="#e0a92e" stroke-width="2"/>'
+        + bellSVG(416, 150)
+        + face(362, 130)
+        + lightBar(330, 96, 66, "fire")
+        + wheel(104, 232, 34, H) + wheel(362, 232, 34, H)
+        + '<rect x="26" y="222" width="416" height="10" rx="5" fill="rgba(20,24,50,0.12)"/>'
+        + "</svg>";
+    }
+    // miniFire — chunky & cute, matches the mini ambulance
+    return svgOpen + shadow
+      + '<g transform="translate(196,60)" stroke="#aeb9cf" stroke-width="4.6"><line x1="0" y1="0" x2="112" y2="0"/><line x1="0" y1="13" x2="112" y2="13"/><g stroke-width="3">'
+      + (function(){ var o=""; for (var j=12;j<112;j+=20){ o += '<line x1="'+j+'" y1="0" x2="'+j+'" y2="13"/>'; } return o; })()
+      + '</g></g>'
+      + '<rect x="92" y="84" width="218" height="136" rx="34" fill="'+B+'"/>'
+      + '<path d="M92 176 h218 v10 q0 34 -34 34 H126 q-34 0 -34 -34 z" fill="'+L+'"/>'
+      + '<rect x="92" y="138" width="218" height="22" fill="'+S+'"/>'
+      + hoseCoil(138, 112, 16)
+      + '<text x="228" y="118" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="25" letter-spacing="3" fill="'+A+'">FIRE</text>'
+      + '<path d="M310 220 V128 q0 -16 16 -20 l40 -6 q14 -2 22 10 l26 40 q16 8 16 26 v42 z" fill="'+B+'"/>'
+      + '<path d="M326 128 l8 -12 q3 -4 8 -5 l34 -5 q7 -1 11 5 l19 30 q2 5 -3 5 h-72 q-6 0 -5 -6 z" fill="#bfe6ff" stroke="#8fb8d8" stroke-width="3"/>'
+      + '<rect x="310" y="160" width="120" height="16" fill="'+S+'"/>'
+      + '<circle cx="404" cy="184" r="8" fill="#ffe14d" stroke="#e0a92e" stroke-width="2"/>'
+      + bellSVG(410, 146)
+      + face(352, 130)
+      + lightBar(128, 72, 72, "fire")
+      + wheel(146, 226, 38, H) + wheel(356, 226, 38, H)
+      + '<rect x="92" y="216" width="338" height="10" rx="5" fill="rgba(20,24,50,0.12)"/>'
+      + "</svg>";
+  }
+
   /* ================= AUDIO ================= */
   var actx = null, masterGain = null, sirenNodes = null;
 
@@ -625,15 +807,89 @@
       var t = actx.currentTime;
       sirenNodes.gain.gain.cancelScheduledValues(t);
       sirenNodes.gain.gain.setTargetAtTime(0, t, 0.05);
-      var osc = sirenNodes.osc, lfo = sirenNodes.lfo;
-      setTimeout(function(){ try{ osc.stop(); }catch(e){} if (lfo){ try{ lfo.stop(); }catch(e){} } }, 220);
+      var osc = sirenNodes.osc, lfo = sirenNodes.lfo, extras = sirenNodes.extras || [];
+      setTimeout(function(){ try{ osc.stop(); }catch(e){} if (lfo){ try{ lfo.stop(); }catch(e){} } for (var i=0;i<extras.length;i++){ try{ extras[i].stop(); }catch(e){} } }, 220);
     } catch(e){}
     sirenNodes = null;
+  }
+
+  function playFireSiren(patternId, pitch){
+    var t = actx.currentTime + 0.02;
+    var dur = patternId === "mechQ" ? 3.9 : (patternId === "airhorn" ? 2.0 : (patternId === "qhorn" ? 3.3 : 2.8));
+    var g = actx.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.42, t + 0.12);
+    g.gain.setValueAtTime(0.42, t + Math.max(0.13, dur - 0.5));
+    g.gain.linearRampToValueAtTime(0, t + dur);
+    var lp = actx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = patternId === "airhorn" ? 1500 : 2400;
+    lp.connect(g); g.connect(masterGain);
+    var extras = [];
+    var lfo = null;
+    var mainOsc = null;
+
+    function hornOsc(freq, startT, stopT){
+      var o = actx.createOscillator(); o.type = "sawtooth"; o.frequency.value = freq;
+      o.connect(lp); o.start(startT); o.stop(stopT);
+      return o;
+    }
+    function spoolOsc(peak, peakT, endF){
+      var o = actx.createOscillator(); o.type = "sawtooth";
+      o.frequency.setValueAtTime(360 * pitch, t);
+      o.frequency.exponentialRampToValueAtTime(peak * pitch, t + peakT);
+      o.frequency.exponentialRampToValueAtTime(endF * pitch, t + dur);
+      o.connect(lp); o.start(t); o.stop(t + dur + 0.1);
+      lfo = actx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 5.8;
+      var lg = actx.createGain(); lg.gain.value = 20 * pitch;
+      lfo.connect(lg); lg.connect(o.frequency);
+      lfo.start(t); lfo.stop(t + dur + 0.1);
+      return o;
+    }
+
+    if (patternId === "airhorn"){
+      // proud double blast: one long, one short — two detuned brassy tones
+      mainOsc = hornOsc(232.1 * pitch, t, t + dur);
+      extras.push(hornOsc(293.7 * pitch, t, t + dur));
+      g.gain.cancelScheduledValues(t);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.04);
+      g.gain.setValueAtTime(0.5, t + 0.72);
+      g.gain.linearRampToValueAtTime(0, t + 0.84);
+      g.gain.setValueAtTime(0, t + 1.0);
+      g.gain.linearRampToValueAtTime(0.5, t + 1.04);
+      g.gain.setValueAtTime(0.5, t + 1.4);
+      g.gain.linearRampToValueAtTime(0, t + 1.6);
+    } else if (patternId === "mechQ"){
+      // the star: Federal Q mechanical spool-up — slow wind to a scream, gritty vibrato, coast down
+      mainOsc = spoolOsc(1390, 2.3, 600);
+      var sub = actx.createOscillator(); sub.type = "square";
+      sub.frequency.setValueAtTime(180 * pitch, t);
+      sub.frequency.exponentialRampToValueAtTime(695 * pitch, t + 2.3);
+      sub.frequency.exponentialRampToValueAtTime(300 * pitch, t + dur);
+      var sg = actx.createGain(); sg.gain.value = 0.16;
+      sub.connect(sg); sg.connect(lp); sub.start(t); sub.stop(t + dur + 0.1);
+      extras.push(sub);
+    } else if (patternId === "qhorn"){
+      mainOsc = spoolOsc(1270, 1.7, 760);
+      extras.push(hornOsc(232.1 * pitch, t + 0.95, t + 1.55));
+      extras.push(hornOsc(293.7 * pitch, t + 0.95, t + 1.55));
+    } else { // fireYelp — lower, faster, rougher than the ambulance yelp
+      mainOsc = actx.createOscillator(); mainOsc.type = "sawtooth";
+      var lo = 500 * pitch, hi = 1170 * pitch, step = 0.26, tt = t;
+      mainOsc.frequency.setValueAtTime(lo, t);
+      while (tt < t + dur){
+        mainOsc.frequency.linearRampToValueAtTime(hi, tt + step/2);
+        mainOsc.frequency.linearRampToValueAtTime(lo, tt + step);
+        tt += step;
+      }
+      mainOsc.connect(lp); mainOsc.start(t); mainOsc.stop(t + dur + 0.1);
+    }
+    sirenNodes = { osc: mainOsc, gain: g, lfo: lfo, extras: extras };
   }
   function playSiren(patternId, pitch){
     if (!actx || muted) return;
     ensureAudio();
     stopSiren();
+    if (patternId === "mechQ" || patternId === "airhorn" || patternId === "fireYelp" || patternId === "qhorn"){ playFireSiren(patternId, pitch); return; }
     var t = actx.currentTime + 0.02;
     var dur = 2.8;
     var osc = actx.createOscillator();
@@ -682,6 +938,25 @@
   function playHorn(){
     if (!actx || muted) return;
     var t = actx.currentTime + 0.05;
+    if (vehicleMode === "fire"){
+      // dual air horn double-blast instead of the ambulance beep-beep
+      var hg = actx.createGain();
+      hg.gain.setValueAtTime(0, t);
+      hg.gain.linearRampToValueAtTime(0.34, t + 0.03);
+      hg.gain.setValueAtTime(0.34, t + 0.5);
+      hg.gain.linearRampToValueAtTime(0, t + 0.6);
+      hg.gain.setValueAtTime(0, t + 0.74);
+      hg.gain.linearRampToValueAtTime(0.34, t + 0.77);
+      hg.gain.setValueAtTime(0.34, t + 1.02);
+      hg.gain.linearRampToValueAtTime(0, t + 1.14);
+      var hlp = actx.createBiquadFilter(); hlp.type = "lowpass"; hlp.frequency.value = 1400;
+      hlp.connect(hg); hg.connect(masterGain);
+      [232.1, 293.7].forEach(function(f){
+        var o = actx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f;
+        o.connect(hlp); o.start(t); o.stop(t + 1.2);
+      });
+      return;
+    }
     [0, 0.28].forEach(function(off){
       var o = actx.createOscillator(); o.type = "square";
       o.frequency.value = 740;
@@ -709,7 +984,8 @@
     ground.style.background = combo.sceneObj.ground;
     decor.innerHTML = decorFor(combo.sceneObj.id);
     setParticles(combo.sceneObj.id);
-    vehicleWrap.innerHTML = ambulanceSVG(combo.type, combo.paletteObj);
+    stage.classList.toggle("fire-mode", combo.mode === "fire");
+    vehicleWrap.innerHTML = combo.mode === "fire" ? fireTruckSVG(combo.type, combo.paletteObj, combo.ladderRaised) : ambulanceSVG(combo.type, combo.paletteObj);
   }
 
   function arrive(combo, withSiren){
@@ -743,6 +1019,7 @@
       titleCard.classList.add("gone");
       hint.classList.add("gone");
       badge.classList.add("show");
+      cornerModeSwitch.classList.add("show");
     }
     vehicleWrap.classList.add("drive-out");
     setTimeout(function(){
@@ -843,6 +1120,58 @@
     if (e.key === "Enter"){ blast(); }
   });
 
+
+  /* ================= MODE SWITCH ================= */
+  function updateModeUI(){
+    var isFire = vehicleMode === "fire";
+    stage.classList.toggle("fire-mode", isFire);
+    var btns = document.querySelectorAll(".mode-btn");
+    for (var i=0;i<btns.length;i++){
+      btns[i].classList.toggle("active", btns[i].getAttribute("data-mode") === (isFire ? "fire" : "amb"));
+    }
+    badge.textContent = isFire ? "FIRE TRUCKS" : "WEE WOO";
+    subtitle.textContent = isFire ? "Ozzie's fire trucks" : "Ozzie's ambulances";
+    weewooBubble.textContent = isFire ? "🚒 wee woo wee woo!" : "🚑 wee woo wee woo!";
+    veilPulse.textContent = isFire ? "Tap anywhere to play! 🚒" : "Tap anywhere to play! 🚑";
+    vehicleWrap.setAttribute("aria-label", isFire ? "Fire truck with flashing lights" : "Ambulance with flashing lights");
+  }
+
+  function switchMode(newMode){
+    if (newMode === vehicleMode) return;
+    vehicleMode = newMode;
+    updateModeUI();
+    if (busy) return;
+    busy = true;
+    stopSiren();
+    vehicleWrap.classList.add("drive-out");
+    setTimeout(function(){
+      arrive(nextCombo(current), true);
+    }, 390);
+  }
+
+  (function wireModeButtons(){
+    var btns = document.querySelectorAll(".mode-btn");
+    for (var i=0;i<btns.length;i++){
+      (function(btn){
+        btn.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+        btn.addEventListener("pointerup", function(e){ e.stopPropagation(); });
+        btn.addEventListener("click", function(e){
+          e.stopPropagation();
+          if (!started){
+            started = true;
+            startVeil.classList.add("gone");
+          }
+          ensureAudio();
+          if (btn.getAttribute("data-mode") === vehicleMode){
+            if (current){ playSiren(current.sirenObj.id, current.pitch); showChip(current.sirenObj.label); }
+          } else {
+            switchMode(btn.getAttribute("data-mode"));
+          }
+        });
+      })(btns[i]);
+    }
+  })();
+
   /* ================= SETTINGS ================= */
   volSlider.addEventListener("input", function(){
     volume = volSlider.value / 100;
@@ -863,6 +1192,7 @@
   document.getElementById("settingsPanel").addEventListener("pointerup", function(e){ e.stopPropagation(); });
 
   /* ================= BOOT ================= */
+  updateModeUI();
   var first = nextCombo(null);
   render(first);
   current = first;
